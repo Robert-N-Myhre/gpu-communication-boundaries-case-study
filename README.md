@@ -42,4 +42,8 @@ Cross-node communication was deferred to a separate investigation. NVLink, RDMA,
 
 This repository contains the case study, selected supporting evidence, and selected research instruments. The [evidence index](evidence/README.md) explains coverage and interpretation; the [instrumentation guide](scripts/README.md) documents dependencies and assumptions. The full experimental archive and platform provisioning toolkit are not included.
 
+## Research authorship
+
+I defined the research questions, the experiment design, and the decision points for this investigation. The volume of collected evidence was more than I intended to analyze by hand, so I relied heavily on AI-assisted tools to compare and summarize it. I reviewed those results and challenged unexpected findings, asking follow-up questions until I understood what the data showed. That understanding guided my decisions about when the investigation needed more experiments or a change of direction. The architectural interpretations and conclusions presented here are mine.
+
 **Author:** Robert N. Myhre · **Study completed:** October 4, 2026
