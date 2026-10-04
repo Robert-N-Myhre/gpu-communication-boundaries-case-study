@@ -71,15 +71,17 @@ disproved; the labs were still complete.
 
 ## Findings
 
-**1. The boundary was free, on both platforms, under both mechanisms.** On the V100 with CPU
+**1. Crossing the socket boundary produced no measurable collective penalty when transport was 
+held constant: host staging on V100, and both P2P and host staging on L40S.** On the V100 with CPU
 binding removed, the cross-socket pair matched the same-socket pair at 256 MB (6.70 vs
 6.64 GB/s, the crossing marginally *ahead*). An earlier 2 % "boundary cost" was a binding
 artefact, not the socket. On the L40S the cross-NUMA pair matched the same-NUMA pair within
 spread at every size with P2P on both sides (21.05 vs 21.11 GB/s) and again with P2P off
 (17.32 vs 17.28 GB/s).
 
-**2. The mechanism was not free: host staging cost 15–18 % of pair bandwidth, regardless of
-placement.** V100: forcing P2P on the same-socket pair, +15 % (7.66 vs 6.65 GB/s). L40S:
+**2. Communication mechanism affected pair bandwidth: forcing P2P improved V100 same-socket 
+bandwidth by 15 %, while disabling P2P reduced L40S bandwidth by approximately 18 % at both 
+placements.** V100: forcing P2P on the same-socket pair, +15 % (7.66 vs 6.65 GB/s). L40S:
 disabling P2P cost 18 % on the same-NUMA pair (17.28 vs 21.11) and 18 % across the boundary
 (17.32 vs 21.05). The cost is per byte: it vanished at 8 bytes and was 16–18 % of time at
 64 KB.
