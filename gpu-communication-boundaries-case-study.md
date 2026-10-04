@@ -124,7 +124,7 @@ communication share of a step. The historical analysis outputs retain the origin
 “exposed-communication bound” label; this public interpretation accounts for the additional
 change visible in the workload code.
 
-**6. Two things nobody predicted.** On the V100, small-message latency sat at one of two
+**6. Two unexpected observations.** On the V100, small-message latency sat at one of two
 levels — about 3.75 or 8.3 µs — chosen per process launch, machine-wide, about one launch in
 seven high, independent of placement, transport, idle time, and GPU clock; 1,600 single-GPU
 runs characterized it without identifying the mechanism. On the L40S, ten draws showed nine
@@ -165,8 +165,8 @@ full rerun of both protocols.
 ## Takeaway
 
 On two very different four-GPU machines, crossing the socket boundary cost a two-GPU
-collective nothing measurable and a training step nothing measurable or slightly less than
-nothing. The cost people attribute to the boundary belonged to the mechanism — host staging
+collective nothing measurable and a training step no measurable penalty and, in one comparison, slightly higher
+throughput. The cost people attribute to the boundary belonged to the mechanism — host staging
 versus direct GPU writes — and the mechanism was selected by the communication library, not
 by the hardware diagram, with a rule that depended on the size of the job. Even an 18 %
 collective swing produced a training-throughput difference within the observed spread at
