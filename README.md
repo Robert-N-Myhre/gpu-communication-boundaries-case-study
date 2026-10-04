@@ -24,7 +24,7 @@ The study combined topology and P2P capability captures, NCCL's observed transpo
 
 Placement and transport policies were varied within each platform. Runs were interleaved, results retained medians and observed spreads, and application transports were captured separately because PyTorch bundled a different NCCL version. Unexpected results changed the investigation; unresolved causes remain explicitly unknown.
 
-The [workload-selection decision](decisions/EDR-002-workload-selection.md) explains the constraints, alternatives, and tradeoffs behind the application experiment.
+The [workload-selection decision](decisions/EDR-002-workload-selection.md) explains the constraints, alternatives, and tradeoffs behind the application experiment. The [repetition-count decision](decisions/EDR-001-run-count-floor.md) records why later experiments moved from five to ten measured runs.
 
 ## Architecture takeaway
 
