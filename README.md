@@ -26,6 +26,8 @@ Placement and transport policies were varied within each platform. Runs were int
 
 The [workload-selection decision](decisions/EDR-002-workload-selection.md) explains the constraints, alternatives, and tradeoffs behind the application experiment. The [repetition-count decision](decisions/EDR-001-run-count-floor.md) records why later experiments moved from five to ten measured runs.
 
+The [L40S transport-discovery field note](field-notes/l40s-transport-discovery.md) preserves the unexpected observations that forced two revisions of the experiment.
+
 ## Architecture takeaway
 
 Topology constrains the available paths. Runtime selection determines which paths are used. Collective measurements expose communication behavior, while workload structure determines how much of that behavior reaches application performance.
