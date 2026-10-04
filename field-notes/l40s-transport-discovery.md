@@ -43,6 +43,12 @@ Consequently, the explicit PHB same-NUMA pair and SYS cross-NUMA pair did not su
 
 These public logs are representative final-pass captures. They do not independently establish consistency across every repetition.
 
+### Reflection
+
+This was the point where I stopped trusting the four-GPU result as a predictor of what NCCL would do in the pair tests. I had already adjusted the experiment once, after finding that the default four-GPU ring used host staging. Then the two-GPU jobs selected P2P by default, which meant communicator size was another variable I had not accounted for.
+
+I did not know why NCCL was making those choices, and I still don't. I could not infer the transport from the topology or the configuration label, so from then on I checked which transport each comparison had actually used before trusting its performance result.
+
 ## The application needed its own check
 
 The application bundled NCCL 2.27.5 rather than the benchmark's system NCCL 2.31.2. Its transports therefore required independent capture.
