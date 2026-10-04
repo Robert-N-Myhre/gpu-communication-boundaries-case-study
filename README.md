@@ -2,6 +2,12 @@
 
 An evidence-driven architecture case study of GPU placement, NCCL transport selection, and collective versus application performance on a four-V100 workstation and a four-L40S cloud instance.
 
+This investigation started with a hardware limitation in my home quad-GPU server that bothered me. When I mapped the workstation's topology, I found that each NUMA node contained two GPUs. Communication within each pair stayed behind a PCIe host bridge, while communication between GPUs on different NUMA nodes took the SYS path across the inter-socket boundary.
+
+My first thought was whether that topology could still be useful for multi-tenant workloads. That led to a more basic question: how much did the extra distance matter? I'm a network person at heart, so I wanted to understand what happened when GPU communication had to cross that boundary and whether the workload noticed the difference.
+
+After thinking about it for a while, I started a project that grew into a broader look at how distance affects AI workloads. I considered extending the comparison across network boundaries and into production-style GPU systems, but as the local experiments developed, the single-server results became interesting enough on their own. I stopped there and left communication between servers as a separate problem.
+
 **Architectural question:** When GPU communication crosses a CPU socket boundary, what changes performance: physical placement, communication mechanism, or both—and which measurements are sufficient to explain the observed behavior?
 
 The investigation began with an expectation that crossing the socket boundary would impose a performance penalty. Controlled comparisons found no measurable collective penalty when transport was held constant. Changing the communication mechanism mattered more, and the application's response often differed from the benchmark's.
