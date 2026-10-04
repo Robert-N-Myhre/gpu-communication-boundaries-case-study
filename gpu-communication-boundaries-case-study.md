@@ -16,8 +16,8 @@ in the job. Even then, an 18 % swing in collective bandwidth reached the trainin
 nothing at all, and twice the transport that won the benchmark lost the training step. The
 actionable finding is unglamorous: measure whether your workload exposes enough
 communication to care before paying for topology optimization, and read the library's
-transport log before trusting the topology diagram. The course closed at this boundary on
-2026-10-04; the cross-node chapter it originally planned was deferred to a separate project,
+transport log before trusting the topology diagram. The investigation concluded at this
+boundary on 2026-10-04; the cross-node chapter it originally planned was deferred to a separate project,
 and nothing here speaks to networks.
 
 ## The Problem
@@ -58,11 +58,14 @@ the L40S `SYS` and `LOC`). On the V100, the arms also ran with and without CPU b
 turned out to matter.
 
 **Application.** A 124 M-parameter causal transformer trained with PyTorch DDP in fp32 on
-synthetic tokens, batch 8 × sequence 512 per GPU, forty steps with the first ten discarded,
-same placements and transport policies as the collective arms, plus a gradient-accumulation
-arm that syncs every fourth micro-batch to bound how much communication the step actually
-exposes. The wheel bundles its own NCCL, so the application's transports were captured
-separately and cited separately.
+synthetic tokens, batch 8 × sequence 512 per GPU. Primary arms ran forty optimizer steps
+with the first ten discarded. The gradient-accumulation arm ran sixteen optimizer steps
+with the first four discarded, synchronizing every fourth micro-batch. It also reduced
+optimizer-update frequency per token, so its throughput difference measures workload
+sensitivity to the combined change, not isolated communication time. Placements and
+transport policies followed the collective comparisons. The wheel bundles its own NCCL,
+so the application's transports were captured separately and cited separately. See the
+[workload-selection decision](decisions/EDR-002-workload-selection.md) for interpretation limits.
 
 **Success and failure.** A result counted if every claim had a transport string and a spread
 behind it. "Large collective differences, minimal workload impact" was declared a valid
@@ -93,10 +96,12 @@ across the socket boundary included — and host memory on every link of the fou
 pairs included. The application's bundled NCCL 2.27.5 made the identical choices. The
 four-GPU default left 4.8 % on the table against an all-P2P ring (20.02 vs 20.99 GB/s).
 
-**4. A ring with mixed transports was worse than a ring with either pure transport, on both
+**4. The tested mixed-transport rings were worse than the all-host-staged rings on both
 platforms.** Pairs on P2P with the two socket crossings on host memory ran 10 % below the
 all-host-memory default on the V100 (7.48 vs 8.27 GB/s) and 37 % below it on the L40S
-(12.61 vs 20.02 GB/s).
+(12.61 vs 20.02 GB/s). The L40S mixed ring also underperformed its all-P2P ring
+(12.61 vs 20.99 GB/s). An all-P2P ring was unavailable on the V100, whose cross-socket
+links did not support P2P.
 
 **5. Almost none of this reached the training step, and when it did, the sign flipped.**
 Per-GPU throughput, outside spread unless noted:
@@ -111,9 +116,13 @@ Per-GPU throughput, outside spread unless noted:
 | L40S: all-P2P ring | +4.8 % | −1.1 % |
 
 The cross-NUMA pair was 2.7 % *faster* than the same-NUMA pair in the L40S training step,
-replicated by an independent control arm to within 0.1 %. Quarter-rate synchronization
-recovered 12 % of per-GPU throughput on the V100 and 17 % on the L40S, bounding exposed
-communication at roughly 11 % and 14 % of a step.
+replicated by an independent control arm to within 0.1 %. The four-micro-batch accumulation
+configuration increased per-GPU throughput by 12 % on the V100 and 17 % on the L40S.
+Those are measured workload-level improvements; synchronization and optimizer updates both
+became less frequent per token. They do not establish an 11–14 % upper bound on the
+communication share of a step. The historical analysis outputs retain the original
+“exposed-communication bound” label; this public interpretation accounts for the additional
+change visible in the workload code.
 
 **6. Two things nobody predicted.** On the V100, small-message latency sat at one of two
 levels — about 3.75 or 8.3 µs — chosen per process launch, machine-wide, about one launch in
@@ -129,14 +138,15 @@ full rerun of both protocols.
 
 ## What This Does and Doesn't Prove
 
-- **One workstation, one cloud instance, one session each.** Every number is about a
-  specific machine on a specific day. The L40S instance is a KVM guest whose host CPU model
-  was never captured, and two earlier instances of the same type failed acceptance (one
+- **One workstation and one cloud instance.** Every number is about a specific machine
+  in the recorded experiment sessions. The L40S instance is a KVM guest whose host CPU
+  model was never captured, and two earlier instances of the same type failed acceptance (one
   with uncorrectable ECC history that no summary diagnostic reported). "The L40S" is not a
   thing this study measured.
 - **One workload, one shape, fp32.** A 124 M-parameter model at batch 8 with DDP. Mixed
-  precision halves gradient bytes; larger models, other parallelisms, and other frameworks
-  were not run. The application findings bound what *this* step exposes.
+  precision, larger models, other parallelisms, and other frameworks were not run. The
+  application findings describe this workload and configuration; they do not establish
+  gradient traffic or performance under mixed precision.
 - **Patterns across platforms, not controlled comparisons.** The two machines differ in
   everything but their four-GPU, two-socket shape. What travelled was the direction of
   each result; the magnitudes did not and were not expected to.
@@ -159,13 +169,17 @@ collective nothing measurable and a training step nothing measurable or slightly
 nothing. The cost people attribute to the boundary belonged to the mechanism — host staging
 versus direct GPU writes — and the mechanism was selected by the communication library, not
 by the hardware diagram, with a rule that depended on the size of the job. Even an 18 %
-collective swing disappeared inside a training step that overlaps most of its communication
-with compute, and the transport that won the microbenchmark lost the step twice.
+collective swing produced a training-throughput difference within the observed spread at
+the same-NUMA placement. The workload uses DDP to overlap gradient synchronization with
+backward computation, but these measurements do not isolate how much communication was
+hidden. The transport that won the microbenchmark lost the step twice.
 
 Three habits made that visible, and they transfer to any system: read the library's
 transport log for every run rather than the topology tool's label; put a real application
 step beside every collective number before drawing a conclusion; and write expectations down
 as hypotheses, so that being wrong on paid time is a finding rather than a failure. The
 decision this supports is plain: before paying for topology-aware placement or forcing a
-transport, measure how much of your step is exposed communication. On these two machines it
-was at most 11–14 %, and nothing you could do about placement moved it by more than 5 %.
+transport, measure whether the workload benefits. In the tested application comparisons,
+transport-policy changes produced per-GPU throughput differences of approximately 5 % or
+less, even where collective bandwidth changed much more. The accumulation experiment
+showed larger workload-level gains, but did not isolate communication time.
