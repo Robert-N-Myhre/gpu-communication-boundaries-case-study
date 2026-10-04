@@ -6,7 +6,7 @@ An evidence-driven architecture case study of GPU placement, NCCL transport sele
 
 The investigation began with an expectation that crossing the socket boundary would impose a performance penalty. Controlled comparisons found no measurable collective penalty when transport was held constant. Changing the communication mechanism mattered more, and the application's response often differed from the benchmark's.
 
-[Read the case study](gpu-communication-boundaries-case-study.md) · [Inspect the selected evidence](evidence/README.md)
+[Read the case study](gpu-communication-boundaries-case-study.md) · [Inspect the selected evidence](evidence/README.md) · [How the platforms were qualified](methodology/platform-qualification.md)
 
 ## Key findings
 
