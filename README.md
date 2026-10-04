@@ -24,6 +24,8 @@ The study combined topology and P2P capability captures, NCCL's observed transpo
 
 Placement and transport policies were varied within each platform. Runs were interleaved, results retained medians and observed spreads, and application transports were captured separately because PyTorch bundled a different NCCL version. Unexpected results changed the investigation; unresolved causes remain explicitly unknown.
 
+The [workload-selection decision](decisions/EDR-002-workload-selection.md) explains the constraints, alternatives, and tradeoffs behind the application experiment.
+
 ## Architecture takeaway
 
 Topology constrains the available paths. Runtime selection determines which paths are used. Collective measurements expose communication behavior, while workload structure determines how much of that behavior reaches application performance.
