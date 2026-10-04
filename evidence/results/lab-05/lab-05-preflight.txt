@@ -1,0 +1,54 @@
+# lab-05-preflight
+captured_utc: 2026-10-04T11:40:00Z
+hostname: computeinstance-e00v4ebypnt9kkmq2y
+command: scripts/lab-05-preflight.sh 
+cuda_device_order: PCI_BUS_ID
+venv: /home/baseline/gputopo-tools/torch-venv
+
+gpu_names: NVIDIA L40S
+driver_version: 580.173.02
+vbios_per_gpu: 0, 95.02.66.00.02;1, 95.02.66.00.02;2, 95.02.66.00.02;3, 95.02.66.00.02
+max_sm_clock_mhz: 2520   (telemetry boost reference — pass to lab-05-telemetry-summary.py)
+nccl: NCCL version 2.31.2+cuda13.0   (system, via nccl-tests probe)
+nccl_tests_commit: 717b683
+torch_check: {"torch": "2.10.0+cu126", "cuda": "12.6", "nccl": "2.27.5", "device_count": 4, "arch_list": ["sm_50", "sm_60", "sm_70", "sm_75", "sm_80", "sm_86", "sm_90"], "sm89_in_archs": false, "matmul_ok": true, "devices": ["NVIDIA L40S", "NVIDIA L40S", "NVIDIA L40S", "NVIDIA L40S"]}
+torch_pip: torch 2.10.0+cu126
+
+## uptime / load at preflight
+ 11:40:00 up 20 min,  1 user,  load average: 1.40, 0.87, 0.61
+
+## nvidia-smi topo -m
+	[4mGPU0	GPU1	GPU2	GPU3	CPU Affinity	NUMA Affinity	GPU NUMA ID[0m
+GPU0	 X 	PHB	SYS	SYS	0-63	0		N/A
+GPU1	PHB	 X 	SYS	SYS	0-63	0		N/A
+GPU2	SYS	SYS	 X 	PHB	64-127	1		N/A
+GPU3	SYS	SYS	PHB	 X 	64-127	1		N/A
+
+Legend:
+
+  X    = Self
+  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
+  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
+  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
+  PIX  = Connection traversing at most a single PCIe bridge
+  NV#  = Connection traversing a bonded set of # NVLinks
+
+## nvidia-smi topo -p2p r
+ 	[4mGPU0	GPU1	GPU2	GPU3	[0m
+ GPU0	X	OK	OK	OK	
+ GPU1	OK	X	OK	OK	
+ GPU2	OK	OK	X	OK	
+ GPU3	OK	OK	OK	X	
+
+Legend:
+
+  X    = Self
+  OK   = Status Ok
+  CNS  = Chipset not supported
+  GNS  = GPU not supported
+  TNS  = Topology not supported
+  NS   = Not supported
+  U    = Unknown
+
+observed_vs_config_expectations: matches (pairs PHB, cross SYS, P2P OK everywhere)

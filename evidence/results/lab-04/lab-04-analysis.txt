@@ -1,0 +1,156 @@
+# lab-04-analysis
+captured_utc: 2026-08-27T15:50:03Z
+hostname: vector-v-01
+command: scripts/lab-04-analysis.py
+source: results/lab-04/runs/<arm>-run-*.log LAB04SUMMARY lines (measured runs only)
+scaling_definition: fixed per-rank workload (guide §1); per-GPU rate and step time answer the caller's question
+spread test: a difference is a finding only where medians sit outside the other side's min-max
+
+## arm S1 — 1 GPU {0} default — 10 runs
+  steady median step ms: median 322.1  min-max 321.5-322.7  cv% 0.12  within-run drift (2nd/1st steady half): median 1.002
+  tokens/s: median 12718  min-max 12692-12740  cv% 0.12   tokens/s/GPU: 12718
+  max rank-0 mem MiB: 7051   loss first->last (run 01): 13.5921 -> 10.9404
+
+## arm A2 — 2 GPU {0,1} same-socket default — 10 runs
+  steady median step ms: median 358.9  min-max 358.5-359.4  cv% 0.09  within-run drift (2nd/1st steady half): median 1.002
+  tokens/s: median 22828  min-max 22791-22852  cv% 0.09   tokens/s/GPU: 11414
+  max rank-0 mem MiB: 7519   loss first->last (run 01): 13.5921 -> 10.9012
+
+## arm C2 — 2 GPU {0,1} PHB — 10 runs
+  steady median step ms: median 370.8  min-max 370.5-371.1  cv% 0.05  within-run drift (2nd/1st steady half): median 1.001
+  tokens/s: median 22091  min-max 22076-22109  cv% 0.05   tokens/s/GPU: 11045
+  max rank-0 mem MiB: 7519   loss first->last (run 01): 13.5921 -> 10.9012
+
+## arm B2 — 2 GPU {0,2} cross-socket default — 10 runs
+  steady median step ms: median 358.8  min-max 358.4-359.4  cv% 0.08  within-run drift (2nd/1st steady half): median 1.002
+  tokens/s: median 22831  min-max 22796-22860  cv% 0.08   tokens/s/GPU: 11416
+  max rank-0 mem MiB: 7519   loss first->last (run 01): 13.5921 -> 10.9012
+
+## arm Q4 — 4 GPU default — 10 runs
+  steady median step ms: median 365.9  min-max 364.4-367.1  cv% 0.20  within-run drift (2nd/1st steady half): median 1.003
+  tokens/s: median 44773  min-max 44625-44963  cv% 0.20   tokens/s/GPU: 11193
+  max rank-0 mem MiB: 7519   loss first->last (run 01): 13.5921 -> 10.8803
+
+## arm P4 — 4 GPU PHB — 10 runs
+  steady median step ms: median 380.3  min-max 379.1-380.7  cv% 0.13  within-run drift (2nd/1st steady half): median 1.001
+  tokens/s: median 43086  min-max 43040-43214  cv% 0.13   tokens/s/GPU: 10772
+  max rank-0 mem MiB: 7519   loss first->last (run 01): 13.5921 -> 10.8803
+
+## arm QL4 — 4 GPU default, accum 4 (1/4 sync rate) — 10 runs
+  steady median step ms: median 1308.2  min-max 1306.2-1309.6  cv% 0.09  within-run drift (2nd/1st steady half): median 1.005
+  tokens/s: median 50095  min-max 50041-50173  cv% 0.09   tokens/s/GPU: 12524
+  max rank-0 mem MiB: 7996   loss first->last (run 01): 13.7057 -> 11.0105
+
+## comparisons (ratio = second/first; step-time ratio < 1 = second faster; per-GPU-rate ratio > 1 = second faster)
+
+### S1 vs A2 — scaling 1 -> 2 GPUs, same socket, default
+
+     step_ms:     322.1 vs     358.9  ratio  1.114  spreads 321.5-322.7 | 358.5-359.4  
+   tok/s/GPU:   12718.0 vs   11414.2  ratio  0.897  spreads 12692.5-12739.6 | 11395.6-11425.8  
+
+### A2 vs Q4 — scaling 2 -> 4 GPUs, default
+
+     step_ms:     358.9 vs     365.9  ratio  1.020  spreads 358.5-359.4 | 364.4-367.1  
+   tok/s/GPU:   11414.2 vs   11193.2  ratio  0.981  spreads 11395.6-11425.8 | 11156.2-11240.8  
+
+### A2 vs B2 — same-socket vs cross-socket pair, default
+
+     step_ms:     358.9 vs     358.8  ratio  1.000  spreads 358.5-359.4 | 358.4-359.4  within spread
+   tok/s/GPU:   11414.2 vs   11415.5  ratio  1.000  spreads 11395.6-11425.8 | 11397.9-11429.8  within spread
+
+### A2 vs C2 — PHB on the pair — does +16 % busbw reach the application?
+
+     step_ms:     358.9 vs     370.8  ratio  1.033  spreads 358.5-359.4 | 370.5-371.1  
+   tok/s/GPU:   11414.2 vs   11045.5  ratio  0.968  spreads 11395.6-11425.8 | 11037.9-11054.3  
+
+### Q4 vs P4 — PHB on the ring — does -10 % busbw reach the application?
+
+     step_ms:     365.9 vs     380.3  ratio  1.039  spreads 364.4-367.1 | 379.1-380.7  
+   tok/s/GPU:   11193.2 vs   10771.5  ratio  0.962  spreads 11156.2-11240.8 | 10759.9-10803.5  
+
+### Q4 vs QL4 — sync every step vs every 4th micro-batch — exposed-communication bound
+
+     step_ms: not comparable — a QL4 optimizer step is 4 micro-batches by construction; tok/s/GPU carries this comparison
+   tok/s/GPU:   11193.2 vs   12523.9  ratio  1.119  spreads 11156.2-11240.8 | 12510.3-12543.3  
+
+## exposed-communication bound (derived from Q4 vs QL4 medians above)
+  per-GPU token rate at full sync 11193 vs quarter sync 12524: rate ratio 1.119 — the gap bounds what full-rate gradient sync costs this workload on this topology.
+  (Interpretation belongs to the findings; DDP overlaps sync with backward, so this is a bound, not a comm time.)
+
+## per-run table with host state (latency-level watch: RSR-004 — one process, one draw)
+
+  arm run  step_ms    tok/s  load1 mhz_max pre_C cool_s
+   S1  01    322.6    12698   0.56    3100    50    135
+   S1  02    322.2    12712   0.58    3100    50    150
+   S1  03    322.1    12715   0.64    3100    50    145
+   S1  04    321.7    12732   0.48    3100    50    145
+   S1  05    322.0    12722   0.53    3100    50    140
+   S1  06    322.3    12710   0.58    3100    50    145
+   S1  07    321.5    12740   0.26    2100    50    140
+   S1  08    322.0    12722   0.66    3100    50    140
+   S1  09    322.7    12692   0.52    3100    50    145
+   S1  10    321.6    12734   0.28    3100    50    145
+   A2  01    358.6    22848   0.28    3100    50     85
+   A2  02    358.5    22852   0.48    3100    50     80
+   A2  03    358.7    22841   0.39    3100    50     80
+   A2  04    358.6    22842   0.34    3100    50     80
+   A2  05    359.2    22806   0.21    3100    50     80
+   A2  06    359.3    22802   0.20    3100    51     75
+   A2  07    358.9    22825   0.20    3100    50     80
+   A2  08    358.8    22832   0.40    3100    50     80
+   A2  09    359.1    22815   0.40    2088    50     75
+   A2  10    359.4    22791   0.15    3100    50     80
+   C2  01    370.6    22103   0.21    3100    50     90
+   C2  02    371.0    22083   0.33    3100    50     90
+   C2  03    370.8    22096   0.41    3100    50     90
+   C2  04    370.6    22102   0.66    3100    50     90
+   C2  05    370.8    22095   0.52    3100    50     90
+   C2  06    370.9    22087   0.27    3100    50     90
+   C2  07    371.1    22076   0.42    3100    50     90
+   C2  08    371.1    22078   0.39    3100    50     90
+   C2  09    371.1    22077   0.27    3100    50     90
+   C2  10    370.5    22109   0.36    3100    50     85
+   B2  01    358.6    22844   0.24    3100    50     90
+   B2  02    359.1    22816   0.36    3100    50     90
+   B2  03    359.4    22796   0.36    3100    50     90
+   B2  04    358.8    22831   0.43    3100    51     85
+   B2  05    359.0    22818   0.41    3100    50     90
+   B2  06    358.7    22836   0.59    3100    50     90
+   B2  07    358.4    22860   0.31    3100    50     90
+   B2  08    358.8    22835   0.36    3100    50     90
+   B2  09    359.1    22811   0.44    3100    50     90
+   B2  10    358.8    22831   0.60    3100    50     95
+   Q4  01    366.0    44767   0.43    3100    50     90
+   Q4  02    366.3    44725   0.37    3100    50     90
+   Q4  03    365.9    44779   0.33    3100    50     85
+   Q4  04    365.8    44792   0.48    3100    50     90
+   Q4  05    367.1    44625   0.28    3100    50     90
+   Q4  06    365.5    44827   0.37    3100    50     85
+   Q4  07    366.2    44746   0.21    3100    50     85
+   Q4  08    365.3    44854   0.43    3100    50     90
+   Q4  09    364.4    44963   0.41    3100    50     90
+   Q4  10    366.4    44713   0.45    3100    50     90
+   P4  01    380.5    43057   0.60    3100    50     90
+   P4  02    380.3    43078   0.34    3100    50     90
+   P4  03    380.3    43081   0.49    3100    50     90
+   P4  04    379.5    43171   0.46    3100    50     90
+   P4  05    380.2    43092   0.48    3100    50     85
+   P4  06    380.1    43099   0.46    3100    50     90
+   P4  07    379.6    43165   0.40    3100    50     90
+   P4  08    380.5    43054   0.43    3100    50     90
+   P4  09    380.7    43040   0.46    3100    50     90
+   P4  10    379.1    43214   0.54    3100    50     85
+  QL4  01   1308.2    50098   0.58    2101    51     90
+  QL4  02   1309.2    50059   0.48    3100    51     85
+  QL4  03   1307.5    50124   0.60    3100    51     85
+  QL4  04   1307.4    50127   0.74    3100    51     85
+  QL4  05   1308.3    50093   0.51    3100    50     90
+  QL4  06   1308.9    50070   0.75    3100    50     85
+  QL4  07   1306.2    50173   0.55    2203    50     90
+  QL4  08   1309.2    50058   0.44    3100    50     90
+  QL4  09   1309.6    50041   0.46    3100    50     90
+  QL4  10   1306.3    50170   0.58    2100    50     90
+
+A difference is a finding only where medians sit outside each other's spread; attribute it to a
+mechanism only with lab-04-transports.txt behind it. Per-GPU rate and step time answer the caller's
+question; aggregate tokens/s rises with world size under this scaling definition by construction.

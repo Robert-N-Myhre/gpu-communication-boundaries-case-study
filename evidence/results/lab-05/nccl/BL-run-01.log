@@ -1,0 +1,138 @@
+# lab-05 nccl arm BL run 01
+# start_utc: 2026-10-04T12:06:21Z
+# hostname: computeinstance-e00v4ebypnt9kkmq2y
+# mask: CUDA_VISIBLE_DEVICES=0,2  ngpus: 2  nccl_p2p_level: LOC  host: unbound
+# command: /home/baseline/gputopo-tools/nccl-tests/build/all_reduce_perf -b 8 -e 256M -f 2 -g 2
+# cuda_device_order: PCI_BUS_ID
+# host_state: load1,procs_running,cpu_mhz_min,cpu_mhz_max = 0.85,2,3095,3095
+
+# nccl-tests version 2.19.7 nccl-headers=23102 nccl-library=23102
+# Collective test starting: all_reduce_perf
+# nThread 1 nGpus 2 minBytes 8 maxBytes 268435456 step: 2(factor) warmup iters: 1 iters: 20 agg iters: 1 validation: 1 graph: 0 unalign: 0
+#
+# Using devices
+#  Rank  0 Group  0 Pid  24572 on computeinstance-e00v4ebypnt9kkmq2y device  0 [0000:8d:00] NVIDIA L40S
+#  Rank  1 Group  0 Pid  24572 on computeinstance-e00v4ebypnt9kkmq2y device  1 [0000:ab:00] NVIDIA L40S
+computeinstance-e00v4ebypnt9kkmq2y:24572:24572 [0] NCCL INFO ENV/Plugin: Could not find: libnccl-env.so
+computeinstance-e00v4ebypnt9kkmq2y:24572:24572 [0] NCCL INFO Bootstrap: Using eth0:10.0.0.14<0>
+computeinstance-e00v4ebypnt9kkmq2y:24572:24583 [0] NCCL INFO Socket handshake magic 0x564ab9f2fc4b9d6c (built-in default)
+computeinstance-e00v4ebypnt9kkmq2y:24572:24572 [0] NCCL INFO cudaDriverVersion 13000
+computeinstance-e00v4ebypnt9kkmq2y:24572:24572 [0] NCCL INFO NCCL version 2.31.2+cuda13.0
+computeinstance-e00v4ebypnt9kkmq2y:24572:24572 [0] NCCL INFO NCCL git version HEAD 7b83616
+computeinstance-e00v4ebypnt9kkmq2y:24572:24572 [0] NCCL INFO Comm config nvlinkCentricSched set to 1
+computeinstance-e00v4ebypnt9kkmq2y:24572:24572 [1] NCCL INFO Comm config nvlinkCentricSched set to 1
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO NET/Plugin: Could not find: libnccl-net.so
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO NET/IB : No device found.
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO NET/IB : Using [RO]; OOB eth0:10.0.0.14<0>
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Failed to initialize NET plugin IB
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO NET/Socket : Using [0]eth0:10.0.0.14<0>
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Initialized NET plugin Socket
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Assigned NET plugin Socket to comm
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO Initialized NET plugin Socket
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO Assigned NET plugin Socket to comm
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO RMA/Plugin: Could not find: libnccl-rma.so
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO RMA/Plugin: Failed to initialize any plugin
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO RMA/Plugin: Failed to initialize any plugin
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO GIN/Plugin: Could not find: libnccl-gin.so
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO GIN/Plugin: Failed to initialize any GIN plugin
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Using network Socket
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO GIN/Plugin: Failed to initialize any GIN plugin
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO Using network Socket
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Loaded NVML from libnvidia-ml.so.1
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO [Rank 0] ncclCommInitRankConfig comm 0x5fdab8209660 rank 0 nranks 2 cudaDev 0 nvmlDev 0 busId 8d000 commId 0x587a045c6d30febd - Init START
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO [Rank 1] ncclCommInitRankConfig comm 0x5fdab832f840 rank 1 nranks 2 cudaDev 1 nvmlDev 2 busId ab000 commId 0x587a045c6d30febd - Init START
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Bootstrap timings total 0.001052 (create 0.000046, send 0.000175, recv 0.000315, ring 0.000039, delay 0.000000)
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO Bootstrap timings total 0.001052 (create 0.000038, send 0.000175, recv 0.000385, ring 0.000032, delay 0.000000)
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO NCCL_P2P_LEVEL set by environment to LOC
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO NCCL_P2P_LEVEL set by environment to LOC
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO ncclTopoGetCpuAffinity: Affinity for GPU 0 is 0-63. (GPU affinity = 0-63 ; CPU affinity = 0-127).
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO NVLS multicast support is not available on dev 0
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO ncclTopoGetCpuAffinity: Affinity for GPU 2 is 32-63. (GPU affinity = 32-63 ; CPU affinity = 0-127).
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Rank 0: 1 Net devices
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Rank 0: 0 CollNet devices
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO NVLS multicast support is not available on dev 1
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO Rank 1: 1 Net devices
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO Rank 1: 0 CollNet devices
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Local Net device counts across ranks: min 1 max 1
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Local CollNet device counts across ranks: min 0 max 0
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO comm 0x5fdab8209660 rank 0 nRanks 2 nNodes 1 localRanks 2 localRank 0 MNNVL 0
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO comm 0x5fdab832f840 rank 1 nRanks 2 nNodes 1 localRanks 2 localRank 1 MNNVL 0
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Channel 00/04 : 0 1
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Channel 01/04 : 0 1
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Channel 02/04 : 0 1
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Channel 03/04 : 0 1
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] 1/-1/-1->0->-1 [2] 1/-1/-1->0->-1 [3] 1/-1/-1->0->-1
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO P2P Chunksize set to 131072
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO Trees [0] -1/-1/-1->1->0 [1] -1/-1/-1->1->0 [2] -1/-1/-1->1->0 [3] -1/-1/-1->1->0
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO P2P Chunksize set to 131072
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Check P2P Type isAllDirectP2p 0 directMode 1 isAllCudaP2p 1
+computeinstance-e00v4ebypnt9kkmq2y:24572:24592 [0] NCCL INFO [Proxy Service] Device 0 CPU core 26
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO Check P2P Type isAllDirectP2p 0 directMode 1 isAllCudaP2p 1
+computeinstance-e00v4ebypnt9kkmq2y:24572:24592 [0] NCCL INFO proxy listening socket at 10.0.0.14<41819>
+computeinstance-e00v4ebypnt9kkmq2y:24572:24593 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 28
+computeinstance-e00v4ebypnt9kkmq2y:24572:24594 [0] NCCL INFO [Proxy Service] Device 1 CPU core 35
+computeinstance-e00v4ebypnt9kkmq2y:24572:24594 [1] NCCL INFO proxy listening socket at 10.0.0.14<52767>
+computeinstance-e00v4ebypnt9kkmq2y:24572:24595 [0] NCCL INFO [Proxy Service UDS] Device 1 CPU core 37
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 2 p2p channels per peer
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO symmetricSupport 1, cuMemEnable 1, globalGinSupport 0, cuMemGdrSupport 1, contiguousRanksPerHost 2, crossNicSupport 1
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 2 p2p channels per peer
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO symmetricSupport 1, cuMemEnable 1, globalGinSupport 0, cuMemGdrSupport 1, contiguousRanksPerHost 2, crossNicSupport 1
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO CC Off, workFifoBytes 1048576
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO ncclCommInitRankConfig comm 0x5fdab8209660 rank 0 nranks 2 cudaDev 0 nvmlDev 0 busId 8d000 commId 0x587a045c6d30febd - Init COMPLETE
+computeinstance-e00v4ebypnt9kkmq2y:24572:24586 [0] NCCL INFO Init timings - ncclCommInitRankConfig: rank 0 nranks 2 total 0.28 (kernels 0.23, alloc 0.04, bootstrap 0.00, allgathers 0.00, topo 0.01, graphs 0.00, connections 0.00, rest 0.00)
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO ncclCommInitRankConfig comm 0x5fdab832f840 rank 1 nranks 2 cudaDev 1 nvmlDev 2 busId ab000 commId 0x587a045c6d30febd - Init COMPLETE
+computeinstance-e00v4ebypnt9kkmq2y:24572:24587 [1] NCCL INFO Init timings - ncclCommInitRankConfig: rank 1 nranks 2 total 0.28 (kernels 0.23, alloc 0.04, bootstrap 0.00, allgathers 0.00, topo 0.01, graphs 0.00, connections 0.00, rest 0.00)
+#
+#                                                              out-of-place                       in-place          
+#       size         count      type   redop    root     time   algbw   busbw  #wrong     time   algbw   busbw  #wrong 
+#        (B)    (elements)                               (us)  (GB/s)  (GB/s)             (us)  (GB/s)  (GB/s)         
+computeinstance-e00v4ebypnt9kkmq2y:24572:24572 [1] NCCL INFO Symmetric VA size=48GB
+computeinstance-e00v4ebypnt9kkmq2y:24572:24572 [0] NCCL INFO Symmetric VA size=48GB
+computeinstance-e00v4ebypnt9kkmq2y:24572:24596 [1] NCCL INFO Channel 00 : 1[2] -> 0[0] via SHM/direct
+computeinstance-e00v4ebypnt9kkmq2y:24572:24597 [0] NCCL INFO Channel 00 : 0[0] -> 1[2] via SHM/direct
+computeinstance-e00v4ebypnt9kkmq2y:24572:24596 [1] NCCL INFO Channel 01 : 1[2] -> 0[0] via SHM/direct
+computeinstance-e00v4ebypnt9kkmq2y:24572:24597 [0] NCCL INFO Channel 01 : 0[0] -> 1[2] via SHM/direct
+computeinstance-e00v4ebypnt9kkmq2y:24572:24596 [1] NCCL INFO Channel 02 : 1[2] -> 0[0] via SHM/direct
+computeinstance-e00v4ebypnt9kkmq2y:24572:24597 [0] NCCL INFO Channel 02 : 0[0] -> 1[2] via SHM/direct
+computeinstance-e00v4ebypnt9kkmq2y:24572:24596 [1] NCCL INFO Channel 03 : 1[2] -> 0[0] via SHM/direct
+computeinstance-e00v4ebypnt9kkmq2y:24572:24597 [0] NCCL INFO Channel 03 : 0[0] -> 1[2] via SHM/direct
+computeinstance-e00v4ebypnt9kkmq2y:24572:24597 [0] NCCL INFO Connected all rings, use ring PXN 0 GDR 1
+computeinstance-e00v4ebypnt9kkmq2y:24572:24596 [1] NCCL INFO Connected all rings, use ring PXN 0 GDR 1
+           8             2     float     sum      -1    11.03    0.00    0.00       0     9.79    0.00    0.00       0
+          16             4     float     sum      -1     9.74    0.00    0.00       0     9.72    0.00    0.00       0
+          32             8     float     sum      -1    11.21    0.00    0.00       0     9.73    0.00    0.00       0
+          64            16     float     sum      -1    10.88    0.01    0.01       0     9.73    0.01    0.01       0
+         128            32     float     sum      -1    11.26    0.01    0.01       0    10.07    0.01    0.01       0
+         256            64     float     sum      -1     9.87    0.03    0.03       0     9.81    0.03    0.03       0
+         512           128     float     sum      -1    12.10    0.04    0.04       0     9.82    0.05    0.05       0
+        1024           256     float     sum      -1     9.74    0.11    0.11       0    10.17    0.10    0.10       0
+        2048           512     float     sum      -1    11.23    0.18    0.18       0     9.80    0.21    0.21       0
+        4096          1024     float     sum      -1     9.95    0.41    0.41       0    10.06    0.41    0.41       0
+        8192          2048     float     sum      -1    12.10    0.68    0.68       0    10.74    0.76    0.76       0
+       16384          4096     float     sum      -1    11.81    1.39    1.39       0    11.88    1.38    1.38       0
+       32768          8192     float     sum      -1    13.33    2.46    2.46       0    13.27    2.47    2.47       0
+       65536         16384     float     sum      -1    16.77    3.91    3.91       0    16.49    3.97    3.97       0
+      131072         32768     float     sum      -1    24.50    5.35    5.35       0    24.30    5.39    5.39       0
+      262144         65536     float     sum      -1    40.26    6.51    6.51       0    39.68    6.61    6.61       0
+      524288        131072     float     sum      -1    64.14    8.17    8.17       0    62.72    8.36    8.36       0
+     1048576        262144     float     sum      -1    93.78   11.18   11.18       0    93.45   11.22   11.22       0
+     2097152        524288     float     sum      -1   159.86   13.12   13.12       0   157.33   13.33   13.33       0
+     4194304       1048576     float     sum      -1   286.93   14.62   14.62       0   285.13   14.71   14.71       0
+     8388608       2097152     float     sum      -1   538.60   15.57   15.57       0   538.86   15.57   15.57       0
+    16777216       4194304     float     sum      -1  1043.78   16.07   16.07       0  1038.05   16.16   16.16       0
+    33554432       8388608     float     sum      -1  2046.61   16.40   16.40       0  2047.16   16.39   16.39       0
+    67108864      16777216     float     sum      -1  4048.33   16.58   16.58       0  4039.60   16.61   16.61       0
+   134217728      33554432     float     sum      -1  7981.90   16.82   16.82       0  7896.73   17.00   17.00       0
+   268435456      67108864     float     sum      -1  15552.2   17.26   17.26       0  15501.7   17.32   17.32       0
+# Out of bounds values : 0 OK
+# Avg bus bandwidth    : 6.44115 
+#
+# Collective test concluded: all_reduce_perf
+#
+

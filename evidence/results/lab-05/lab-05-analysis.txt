@@ -1,0 +1,221 @@
+# lab-05-analysis
+captured_utc: 2026-10-04T12:41:37Z
+hostname: dev-wrkstn
+command: scripts/lab-05-analysis.py
+source: results/lab-05/runs/<arm>-run-*.log LAB05SUMMARY lines (measured runs only)
+scaling_definition: fixed per-rank workload (guide §1); per-GPU rate and step time answer the caller's question
+spread test: a difference is a finding only where medians sit outside the other side's min-max
+
+## arm S1 — 1 GPU {0} default — 10 runs
+  steady median step ms: median 141.0  min-max 140.7-142.1  cv% 0.35  within-run drift (2nd/1st steady half): median 1.000
+  tokens/s: median 29046  min-max 28828-29110  cv% 0.35   tokens/s/GPU: 29046
+  max rank-0 mem MiB: 7051   loss first->last (run 01): 13.5921 -> 10.9404
+
+## arm A2 — 2 GPU {0,1} same-NUMA default (P2P, measured) — 10 runs
+  steady median step ms: median 159.9  min-max 159.4-161.1  cv% 0.29  within-run drift (2nd/1st steady half): median 0.998
+  tokens/s: median 51220  min-max 50866-51386  cv% 0.29   tokens/s/GPU: 25610
+  max rank-0 mem MiB: 7993   loss first->last (run 01): 13.5921 -> 10.9012
+
+## arm A2L — 2 GPU {0,1} same-NUMA LOC (host-staged) — 10 runs
+  steady median step ms: median 159.7  min-max 158.7-159.9  cv% 0.24  within-run drift (2nd/1st steady half): median 0.999
+  tokens/s: median 51285  min-max 51215-51611  cv% 0.24   tokens/s/GPU: 25642
+  max rank-0 mem MiB: 7993   loss first->last (run 01): 13.5921 -> 10.9012
+
+## arm B2 — 2 GPU {0,2} cross-NUMA default (P2P, measured) — 10 runs
+  steady median step ms: median 155.7  min-max 155.0-156.6  cv% 0.33  within-run drift (2nd/1st steady half): median 1.000
+  tokens/s: median 52621  min-max 52323-52850  cv% 0.33   tokens/s/GPU: 26310
+  max rank-0 mem MiB: 7993   loss first->last (run 01): 13.5921 -> 10.9012
+
+## arm BS2 — 2 GPU {0,2} cross-NUMA SYS (P2P — replicate of B2) — 10 runs
+  steady median step ms: median 155.6  min-max 155.1-156.2  cv% 0.21  within-run drift (2nd/1st steady half): median 1.000
+  tokens/s: median 52643  min-max 52458-52812  cv% 0.21   tokens/s/GPU: 26321
+  max rank-0 mem MiB: 7993   loss first->last (run 01): 13.5921 -> 10.9012
+
+## arm B2L — 2 GPU {0,2} cross-NUMA LOC (host-staged) — 10 runs
+  steady median step ms: median 158.4  min-max 157.7-159.4  cv% 0.34  within-run drift (2nd/1st steady half): median 0.999
+  tokens/s: median 51704  min-max 51379-51961  cv% 0.34   tokens/s/GPU: 25852
+  max rank-0 mem MiB: 7993   loss first->last (run 01): 13.5921 -> 10.9012
+
+## arm Q4 — 4 GPU default (all SHM) — 10 runs
+  steady median step ms: median 160.6  min-max 159.8-161.4  cv% 0.34  within-run drift (2nd/1st steady half): median 1.001
+  tokens/s: median 102047  min-max 101527-102516  cv% 0.34   tokens/s/GPU: 25512
+  max rank-0 mem MiB: 7993   loss first->last (run 01): 13.5921 -> 10.8803
+
+## arm QH4 — 4 GPU PHB (mixed ring: pair P2P, SYS SHM) — 10 runs
+  steady median step ms: median 168.8  min-max 168.5-169.6  cv% 0.24  within-run drift (2nd/1st steady half): median 1.002
+  tokens/s: median 97070  min-max 96580-97220  cv% 0.24   tokens/s/GPU: 24268
+  max rank-0 mem MiB: 7520   loss first->last (run 01): 13.5921 -> 10.8803
+
+## arm QS4 — 4 GPU SYS (all-P2P ring) — 10 runs
+  steady median step ms: median 162.4  min-max 162.0-162.6  cv% 0.14  within-run drift (2nd/1st steady half): median 1.001
+  tokens/s: median 100901  min-max 100783-101143  cv% 0.14   tokens/s/GPU: 25225
+  max rank-0 mem MiB: 7993   loss first->last (run 01): 13.5921 -> 10.8803
+
+## arm QL4 — 4 GPU default, accum 4 (1/4 sync rate) — 10 runs
+  steady median step ms: median 550.7  min-max 550.1-553.3  cv% 0.20  within-run drift (2nd/1st steady half): median 1.001
+  tokens/s: median 119010  min-max 118450-119137  cv% 0.20   tokens/s/GPU: 29752
+  max rank-0 mem MiB: 7999   loss first->last (run 01): 13.7057 -> 11.0105
+
+## comparisons (ratio = second/first; step-time ratio < 1 = second faster; per-GPU-rate ratio > 1 = second faster)
+
+### S1 vs A2 — scaling 1 -> 2 GPUs, same NUMA, default
+
+     step_ms:     141.0 vs     159.9  ratio  1.134  spreads 140.7-142.1 | 159.4-161.1  
+   tok/s/GPU:   29046.2 vs   25609.8  ratio  0.882  spreads 28828.1-29109.5 | 25433.2-25692.9  
+
+### A2 vs Q4 — scaling 2 -> 4 GPUs, default
+
+     step_ms:     159.9 vs     160.6  ratio  1.004  spreads 159.4-161.1 | 159.8-161.4  within spread
+   tok/s/GPU:   25609.8 vs   25511.8  ratio  0.996  spreads 25433.2-25692.9 | 25381.8-25629.0  within spread
+
+### A2 vs B2 — same-NUMA vs cross-NUMA pair, default — the SYS boundary with P2P on both sides (measured transport)
+
+     step_ms:     159.9 vs     155.7  ratio  0.973  spreads 159.4-161.1 | 155.0-156.6  
+   tok/s/GPU:   25609.8 vs   26310.3  ratio  1.027  spreads 25433.2-25692.9 | 26161.7-26424.8  
+
+### A2 vs A2L — pair mechanism at the app — P2P vs host-staged, same placement (LAB-04 C2 cell, second platform)
+
+     step_ms:     159.9 vs     159.7  ratio  0.999  spreads 159.4-161.1 | 158.7-159.9  within spread
+   tok/s/GPU:   25609.8 vs   25642.5  ratio  1.001  spreads 25433.2-25692.9 | 25607.6-25805.4  within spread
+
+### B2 vs B2L — boundary mechanism at the app — P2P vs host-staged across SYS, same placement
+
+     step_ms:     155.7 vs     158.4  ratio  1.018  spreads 155.0-156.6 | 157.7-159.4  
+   tok/s/GPU:   26310.3 vs   25852.1  ratio  0.983  spreads 26161.7-26424.8 | 25689.4-25980.3  
+
+### A2L vs B2L — same-NUMA vs cross-NUMA pair, both host-staged — the V100 comparison like for like
+
+     step_ms:     159.7 vs     158.4  ratio  0.992  spreads 158.7-159.9 | 157.7-159.4  
+   tok/s/GPU:   25642.5 vs   25852.1  ratio  1.008  spreads 25607.6-25805.4 | 25689.4-25980.3  
+
+### B2 vs BS2 — replicate control — same transport (P2P), different knob label: the app-level noise floor
+
+     step_ms:     155.7 vs     155.6  ratio  1.000  spreads 155.0-156.6 | 155.1-156.2  within spread
+   tok/s/GPU:   26310.3 vs   26321.3  ratio  1.000  spreads 26161.7-26424.8 | 26229.0-26405.8  within spread
+
+### Q4 vs QH4 — all-SHM ring vs mixed ring (pair P2P) — LAB-04 P4 pattern on L40S
+
+     step_ms:     160.6 vs     168.8  ratio  1.051  spreads 159.8-161.4 | 168.5-169.6  
+   tok/s/GPU:   25511.8 vs   24267.5  ratio  0.951  spreads 25381.8-25629.0 | 24144.9-24305.1  
+
+### Q4 vs QS4 — all-SHM ring vs all-P2P ring at the app
+
+     step_ms:     160.6 vs     162.4  ratio  1.011  spreads 159.8-161.4 | 162.0-162.6  
+   tok/s/GPU:   25511.8 vs   25225.3  ratio  0.989  spreads 25381.8-25629.0 | 25195.7-25285.8  
+
+### Q4 vs QL4 — sync every step vs every 4th micro-batch — exposed-communication bound
+
+     step_ms: not comparable — a QL4 optimizer step is 4 micro-batches by construction; tok/s/GPU carries this comparison
+   tok/s/GPU:   25511.8 vs   29752.4  ratio  1.166  spreads 25381.8-25629.0 | 29612.6-29784.4  
+
+## exposed-communication bound (derived from Q4 vs QL4 medians above)
+  per-GPU token rate at full sync 25512 vs quarter sync 29752: rate ratio 1.166 — the gap bounds what full-rate gradient sync costs this workload on this topology.
+  (Interpretation belongs to the findings; DDP overlaps sync with backward, so this is a bound, not a comm time.)
+
+## per-run table with host state (latency-level watch: RSR-004 — one process, one draw)
+
+  arm run  step_ms    tok/s  load1 mhz_max pre_C
+   S1  01    141.0    29042   2.87    3095    49
+   S1  02    140.9    29071   2.92    3095    51
+   S1  03    141.8    28890   3.01    3095    51
+   S1  04    141.0    29058   3.39    3095    52
+   S1  05    140.7    29110   3.19    3095    52
+   S1  06    142.1    28828   3.24    3095    52
+   S1  07    140.8    29101   3.19    3095    52
+   S1  08    141.0    29050   3.42    3095    51
+   S1  09    141.9    28864   3.11    3095    52
+   S1  10    141.3    28994   3.44    3095    52
+   A2  01    159.4    51386   2.58    3095    50
+   A2  02    159.8    51277   2.70    3095    52
+   A2  03    161.1    50866   2.93    3095    52
+   A2  04    160.2    51133   3.03    3095    52
+   A2  05    159.9    51231   2.94    3095    52
+   A2  06    159.8    51260   2.89    3095    52
+   A2  07    160.3    51104   2.85    3095    52
+   A2  08    159.7    51307   3.21    3095    52
+   A2  09    160.4    51058   2.86    3095    52
+   A2  10    160.0    51208   3.14    3095    52
+  A2L  01    159.9    51245   2.57    3095    49
+  A2L  02    159.8    51272   2.62    3095    51
+  A2L  03    159.3    51422   2.65    3095    51
+  A2L  04    159.9    51235   2.87    3095    52
+  A2L  05    159.9    51215   2.87    3095    52
+  A2L  06    159.4    51387   2.83    3095    51
+  A2L  07    159.3    51411   2.37    3095    51
+  A2L  08    159.7    51298   3.02    3095    51
+  A2L  09    159.9    51238   2.80    3095    51
+  A2L  10    158.7    51611   3.04    3095    51
+   B2  01    155.2    52790   2.53    3095    49
+   B2  02    155.5    52673   2.52    3095    50
+   B2  03    155.1    52836   2.55    3095    51
+   B2  04    155.8    52564   2.38    3095    51
+   B2  05    156.6    52323   2.76    3095    51
+   B2  06    156.1    52496   2.66    3095    51
+   B2  07    156.1    52480   2.31    3095    51
+   B2  08    155.0    52850   2.86    3095    51
+   B2  09    155.8    52568   2.56    3095    51
+   B2  10    155.2    52768   2.74    3095    51
+  BS2  01    155.4    52708   2.53    3095    49
+  BS2  02    155.7    52624   2.52    3095    51
+  BS2  03    155.6    52662   2.44    3095    51
+  BS2  04    156.2    52458   2.32    3095    52
+  BS2  05    155.8    52589   2.64    3095    51
+  BS2  06    155.3    52754   2.56    3095    51
+  BS2  07    155.6    52665   2.17    3095    51
+  BS2  08    156.0    52508   2.81    3095    51
+  BS2  09    155.9    52560   2.55    3095    51
+  BS2  10    155.1    52812   2.63    3095    51
+  B2L  01    157.7    51961   2.18    3095    50
+  B2L  02    158.2    51784   2.34    3095    51
+  B2L  03    159.4    51379   2.37    3095    51
+  B2L  04    158.3    51759   2.34    3095    52
+  B2L  05    158.5    51684   2.42    3095    51
+  B2L  06    159.4    51401   2.37    3095    51
+  B2L  07    158.4    51725   2.15    3095    51
+  B2L  08    158.6    51643   2.68    3095    51
+  B2L  09    158.1    51803   2.35    3095    51
+  B2L  10    158.7    51636   2.42    3095    51
+   Q4  01    159.9   102464   2.23    3095    49
+   Q4  02    160.0   102384   2.29    3095    50
+   Q4  03    161.2   101649   2.06    3095    51
+   Q4  04    160.8   101893   2.35    3095    51
+   Q4  05    160.3   102215   2.35    3095    51
+   Q4  06    160.9   101835   2.31    3095    51
+   Q4  07    160.3   102201   2.20    3095    51
+   Q4  08    159.8   102516   2.46    3095    50
+   Q4  09    161.4   101527   2.29    3095    50
+   Q4  10    160.9   101836   2.35    3095    51
+  QH4  01    169.1    96897   2.30    3095    49
+  QH4  02    168.8    97088   2.54    3095    50
+  QH4  03    169.6    96595   2.44    3095    50
+  QH4  04    169.3    96776   2.72    3095    51
+  QH4  05    169.6    96580   2.72    3095    51
+  QH4  06    168.8    97060   2.68    3095    50
+  QH4  07    168.8    97080   2.77    3095    50
+  QH4  08    168.5    97220   2.70    3095    50
+  QH4  09    168.8    97087   2.67    3095    50
+  QH4  10    168.6    97156   2.67    3095    50
+  QS4  01    162.0   101143   2.56    3095    49
+  QS4  02    162.3   100970   2.61    3095    50
+  QS4  03    162.4   100882   2.74    3095    50
+  QS4  04    162.6   100785   2.84    3095    50
+  QS4  05    162.5   100838   3.00    3095    50
+  QS4  06    162.1   101058   2.88    3095    50
+  QS4  07    162.0   101127   3.11    3095    50
+  QS4  08    162.5   100801   2.78    3095    50
+  QS4  09    162.6   100783   3.12    3095    50
+  QS4  10    162.3   100921   2.96    3095    50
+  QL4  01    550.6   119027   2.61    3095    49
+  QL4  02    550.8   118992   2.90    3095    50
+  QL4  03    551.8   118759   3.02    3095    51
+  QL4  04    552.3   118670   2.96    3095    50
+  QL4  05    550.1   119137   3.02    3095    50
+  QL4  06    550.4   119066   3.14    3095    50
+  QL4  07    550.2   119116   3.39    3095    50
+  QL4  08    550.2   119116   2.85    3095    50
+  QL4  09    553.3   118450   3.19    3095    50
+  QL4  10    552.1   118696   3.12    3095    50
+
+A difference is a finding only where medians sit outside each other's spread; attribute it to a
+mechanism only with lab-05-transports.txt behind it. Per-GPU rate and step time answer the caller's
+question; aggregate tokens/s rises with world size under this scaling definition by construction.

@@ -1,0 +1,106 @@
+# lab-03-nccl-transports
+captured_utc: 2026-08-24T13:02:50Z
+hostname: vector-v-01
+command: scripts/lab-03-nccl-transports.sh 
+
+## arm S1
+# mask: CUDA_VISIBLE_DEVICES=0  ngpus: 1  node: 0  nccl_p2p_level: <default>
+  affinity: Setting affinity for GPU 0 to 3ff003ff
+S1-run-01.log: <no via lines — 1 GPU has no links>
+S1-run-02.log: <no via lines — 1 GPU has no links>
+S1-run-03.log: <no via lines — 1 GPU has no links>
+S1-run-04.log: <no via lines — 1 GPU has no links>
+S1-run-05.log: <no via lines — 1 GPU has no links>
+consistent_across_runs: yes
+
+## arm A
+# mask: CUDA_VISIBLE_DEVICES=0,1  ngpus: 2  node: 0  nccl_p2p_level: <default>
+  affinity: Setting affinity for GPU 0 to 3ff003ff
+  affinity: Setting affinity for GPU 1 to 3ff003ff
+A-run-01.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 0[0] via SHM/direct/direct
+A-run-02.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 0[0] via SHM/direct/direct
+A-run-03.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 0[0] via SHM/direct/direct
+A-run-04.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 0[0] via SHM/direct/direct
+A-run-05.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 0[0] via SHM/direct/direct
+consistent_across_runs: yes
+
+## arm AU
+# mask: CUDA_VISIBLE_DEVICES=0,1  ngpus: 2  node: -  nccl_p2p_level: <default>
+  affinity: Setting affinity for GPU 0 to 3ff003ff
+  affinity: Setting affinity for GPU 1 to 3ff003ff
+AU-run-01.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 0[0] via SHM/direct/direct
+AU-run-02.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 0[0] via SHM/direct/direct
+AU-run-03.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 0[0] via SHM/direct/direct
+AU-run-04.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 0[0] via SHM/direct/direct
+AU-run-05.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 0[0] via SHM/direct/direct
+consistent_across_runs: yes
+
+## arm C
+# mask: CUDA_VISIBLE_DEVICES=0,1  ngpus: 2  node: 0  nccl_p2p_level: PHB
+  affinity: Setting affinity for GPU 0 to 3ff003ff
+  affinity: Setting affinity for GPU 1 to 3ff003ff
+C-run-01.log: 0[0] -> 1[1] via P2P/direct pointer;1[1] -> 0[0] via P2P/direct pointer
+C-run-02.log: 0[0] -> 1[1] via P2P/direct pointer;1[1] -> 0[0] via P2P/direct pointer
+C-run-03.log: 0[0] -> 1[1] via P2P/direct pointer;1[1] -> 0[0] via P2P/direct pointer
+C-run-04.log: 0[0] -> 1[1] via P2P/direct pointer;1[1] -> 0[0] via P2P/direct pointer
+C-run-05.log: 0[0] -> 1[1] via P2P/direct pointer;1[1] -> 0[0] via P2P/direct pointer
+consistent_across_runs: yes
+
+## arm B
+# mask: CUDA_VISIBLE_DEVICES=0,2  ngpus: 2  node: 0  nccl_p2p_level: <default>
+  affinity: Setting affinity for GPU 0 to 3ff003ff
+B-run-01.log: 0[0] -> 1[2] via SHM/direct/direct;1[2] -> 0[0] via SHM/direct/direct
+B-run-02.log: 0[0] -> 1[2] via SHM/direct/direct;1[2] -> 0[0] via SHM/direct/direct
+B-run-03.log: 0[0] -> 1[2] via SHM/direct/direct;1[2] -> 0[0] via SHM/direct/direct
+B-run-04.log: 0[0] -> 1[2] via SHM/direct/direct;1[2] -> 0[0] via SHM/direct/direct
+B-run-05.log: 0[0] -> 1[2] via SHM/direct/direct;1[2] -> 0[0] via SHM/direct/direct
+consistent_across_runs: yes
+
+## arm U
+# mask: CUDA_VISIBLE_DEVICES=0,2  ngpus: 2  node: -  nccl_p2p_level: <default>
+  affinity: Setting affinity for GPU 0 to 3ff003ff
+  affinity: Setting affinity for GPU 2 to ff,c00ffc00
+U-run-01.log: 0[0] -> 1[2] via SHM/direct/direct;1[2] -> 0[0] via SHM/direct/direct
+U-run-02.log: 0[0] -> 1[2] via SHM/direct/direct;1[2] -> 0[0] via SHM/direct/direct
+U-run-03.log: 0[0] -> 1[2] via SHM/direct/direct;1[2] -> 0[0] via SHM/direct/direct
+U-run-04.log: 0[0] -> 1[2] via SHM/direct/direct;1[2] -> 0[0] via SHM/direct/direct
+U-run-05.log: 0[0] -> 1[2] via SHM/direct/direct;1[2] -> 0[0] via SHM/direct/direct
+consistent_across_runs: yes
+
+## arm Q
+# mask: CUDA_VISIBLE_DEVICES=0,1,2,3  ngpus: 4  node: -  nccl_p2p_level: <default>
+  affinity: Setting affinity for GPU 0 to 3ff003ff
+  affinity: Setting affinity for GPU 1 to 3ff003ff
+  affinity: Setting affinity for GPU 2 to ff,c00ffc00
+  affinity: Setting affinity for GPU 3 to ff,c00ffc00
+Q-run-01.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 2[2] via SHM/direct/direct;2[2] -> 3[3] via SHM/direct/direct;3[3] -> 0[0] via SHM/direct/direct
+Q-run-02.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 2[2] via SHM/direct/direct;2[2] -> 3[3] via SHM/direct/direct;3[3] -> 0[0] via SHM/direct/direct
+Q-run-03.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 2[2] via SHM/direct/direct;2[2] -> 3[3] via SHM/direct/direct;3[3] -> 0[0] via SHM/direct/direct
+Q-run-04.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 2[2] via SHM/direct/direct;2[2] -> 3[3] via SHM/direct/direct;3[3] -> 0[0] via SHM/direct/direct
+Q-run-05.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 2[2] via SHM/direct/direct;2[2] -> 3[3] via SHM/direct/direct;3[3] -> 0[0] via SHM/direct/direct
+consistent_across_runs: yes
+
+## arm P
+# mask: CUDA_VISIBLE_DEVICES=0,1,2,3  ngpus: 4  node: -  nccl_p2p_level: PHB
+  affinity: Setting affinity for GPU 0 to 3ff003ff
+  affinity: Setting affinity for GPU 1 to 3ff003ff
+  affinity: Setting affinity for GPU 2 to ff,c00ffc00
+  affinity: Setting affinity for GPU 3 to ff,c00ffc00
+P-run-01.log: 0[0] -> 1[1] via P2P/direct pointer;1[1] -> 2[2] via SHM/direct/direct;2[2] -> 3[3] via P2P/direct pointer;3[3] -> 0[0] via SHM/direct/direct
+P-run-02.log: 0[0] -> 1[1] via P2P/direct pointer;1[1] -> 2[2] via SHM/direct/direct;2[2] -> 3[3] via P2P/direct pointer;3[3] -> 0[0] via SHM/direct/direct
+P-run-03.log: 0[0] -> 1[1] via P2P/direct pointer;1[1] -> 2[2] via SHM/direct/direct;2[2] -> 3[3] via P2P/direct pointer;3[3] -> 0[0] via SHM/direct/direct
+P-run-04.log: 0[0] -> 1[1] via P2P/direct pointer;1[1] -> 2[2] via SHM/direct/direct;2[2] -> 3[3] via P2P/direct pointer;3[3] -> 0[0] via SHM/direct/direct
+P-run-05.log: 0[0] -> 1[1] via P2P/direct pointer;1[1] -> 2[2] via SHM/direct/direct;2[2] -> 3[3] via P2P/direct pointer;3[3] -> 0[0] via SHM/direct/direct
+consistent_across_runs: yes
+
+## arm N
+# mask: CUDA_VISIBLE_DEVICES=0,1,2,3  ngpus: 4  node: 0  nccl_p2p_level: <default>
+  affinity: Setting affinity for GPU 0 to 3ff003ff
+  affinity: Setting affinity for GPU 1 to 3ff003ff
+N-run-01.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 2[2] via SHM/direct/direct;2[2] -> 3[3] via SHM/direct/direct;3[3] -> 0[0] via SHM/direct/direct
+N-run-02.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 2[2] via SHM/direct/direct;2[2] -> 3[3] via SHM/direct/direct;3[3] -> 0[0] via SHM/direct/direct
+N-run-03.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 2[2] via SHM/direct/direct;2[2] -> 3[3] via SHM/direct/direct;3[3] -> 0[0] via SHM/direct/direct
+N-run-04.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 2[2] via SHM/direct/direct;2[2] -> 3[3] via SHM/direct/direct;3[3] -> 0[0] via SHM/direct/direct
+N-run-05.log: 0[0] -> 1[1] via SHM/direct/direct;1[1] -> 2[2] via SHM/direct/direct;2[2] -> 3[3] via SHM/direct/direct;3[3] -> 0[0] via SHM/direct/direct
+consistent_across_runs: yes
+

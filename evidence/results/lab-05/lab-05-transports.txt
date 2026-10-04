@@ -1,0 +1,50 @@
+# lab-05-transports
+captured_utc: 2026-10-04T11:56:59Z
+hostname: computeinstance-e00v4ebypnt9kkmq2y
+command: scripts/lab-05-transports.sh 
+
+## default
+### workload nccl version
+  # torch 2.10.0+cu126 nccl 2.27.5 cuda 12.6 device NVIDIA L40S
+### env lines
+  (none)
+### transports per link
+  Channel 00 : 0[0] -> 1[1] via SHM/direct/direct
+  Channel 00 : 1[1] -> 2[2] via SHM/direct/direct
+  Channel 00 : 2[2] -> 3[3] via SHM/direct/direct
+  Channel 00 : 3[3] -> 0[0] via SHM/direct/direct
+  Channel 01 : 0[0] -> 1[1] via SHM/direct/direct
+  Channel 01 : 1[1] -> 2[2] via SHM/direct/direct
+  Channel 01 : 2[2] -> 3[3] via SHM/direct/direct
+  Channel 01 : 3[3] -> 0[0] via SHM/direct/direct
+
+## phb
+### workload nccl version
+  # torch 2.10.0+cu126 nccl 2.27.5 cuda 12.6 device NVIDIA L40S
+### env lines
+  NCCL_P2P_LEVEL set by environment to PHB
+### transports per link
+  Channel 00 : 1[1] -> 2[2] via SHM/direct/direct
+  Channel 00 : 3[3] -> 0[0] via SHM/direct/direct
+  Channel 00/0 : 0[0] -> 1[1] via P2P/CUMEM
+  Channel 00/0 : 2[2] -> 3[3] via P2P/CUMEM
+  Channel 01 : 1[1] -> 2[2] via SHM/direct/direct
+  Channel 01 : 3[3] -> 0[0] via SHM/direct/direct
+  Channel 01/0 : 0[0] -> 1[1] via P2P/CUMEM
+  Channel 01/0 : 2[2] -> 3[3] via P2P/CUMEM
+
+## sys
+### workload nccl version
+  # torch 2.10.0+cu126 nccl 2.27.5 cuda 12.6 device NVIDIA L40S
+### env lines
+  NCCL_P2P_LEVEL set by environment to SYS
+### transports per link
+  Channel 00/0 : 0[0] -> 1[1] via P2P/CUMEM
+  Channel 00/0 : 1[1] -> 2[2] via P2P/CUMEM
+  Channel 00/0 : 2[2] -> 3[3] via P2P/CUMEM
+  Channel 00/0 : 3[3] -> 0[0] via P2P/CUMEM
+  Channel 01/0 : 0[0] -> 1[1] via P2P/CUMEM
+  Channel 01/0 : 1[1] -> 2[2] via P2P/CUMEM
+  Channel 01/0 : 2[2] -> 3[3] via P2P/CUMEM
+  Channel 01/0 : 3[3] -> 0[0] via P2P/CUMEM
+

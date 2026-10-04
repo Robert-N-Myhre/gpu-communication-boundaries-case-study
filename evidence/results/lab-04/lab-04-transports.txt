@@ -1,0 +1,35 @@
+# lab-04-transports
+captured_utc: 2026-08-27T12:28:26Z
+hostname: vector-v-01
+command: scripts/lab-04-transports.sh 
+
+## default
+### workload nccl version
+  # torch 2.10.0+cu126 nccl 2.27.5 cuda 12.6 device Tesla V100-PCIE-16GB
+### env lines
+  (none)
+### transports per link
+  Channel 00 : 0[0] -> 1[1] via SHM/direct/direct
+  Channel 00 : 1[1] -> 2[2] via SHM/direct/direct
+  Channel 00 : 2[2] -> 3[3] via SHM/direct/direct
+  Channel 00 : 3[3] -> 0[0] via SHM/direct/direct
+  Channel 01 : 0[0] -> 1[1] via SHM/direct/direct
+  Channel 01 : 1[1] -> 2[2] via SHM/direct/direct
+  Channel 01 : 2[2] -> 3[3] via SHM/direct/direct
+  Channel 01 : 3[3] -> 0[0] via SHM/direct/direct
+
+## phb
+### workload nccl version
+  # torch 2.10.0+cu126 nccl 2.27.5 cuda 12.6 device Tesla V100-PCIE-16GB
+### env lines
+  NCCL_P2P_LEVEL set by environment to PHB
+### transports per link
+  Channel 00 : 1[1] -> 2[2] via SHM/direct/direct
+  Channel 00 : 3[3] -> 0[0] via SHM/direct/direct
+  Channel 00/0 : 0[0] -> 1[1] via P2P/CUMEM
+  Channel 00/0 : 2[2] -> 3[3] via P2P/CUMEM
+  Channel 01 : 1[1] -> 2[2] via SHM/direct/direct
+  Channel 01 : 3[3] -> 0[0] via SHM/direct/direct
+  Channel 01/0 : 0[0] -> 1[1] via P2P/CUMEM
+  Channel 01/0 : 2[2] -> 3[3] via P2P/CUMEM
+

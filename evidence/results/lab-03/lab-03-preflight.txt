@@ -1,0 +1,49 @@
+# lab-03-preflight
+captured_utc: 2026-08-24T12:49:00Z
+hostname: vector-v-01
+command: scripts/lab-03-preflight.sh 
+cuda_device_order: PCI_BUS_ID
+
+driver_version: 580.159.04   (LAB-02: 580.159.04)
+nccl: NCCL version 2.26.2+cuda12.8   (LAB-02: NCCL version 2.26.2+cuda12.8)
+nccl_tests_commit: 717b683   (LAB-02: 717b683)
+all_reduce_perf: /home/ccie9837/gputopo-tools/nccl-tests/build/all_reduce_perf
+
+## uptime / load at preflight
+ 12:49:00 up 10 min,  1 user,  load average: 0.27, 0.20, 0.11
+
+## nvidia-smi topo -m
+	[4mGPU0	GPU1	GPU2	GPU3	CPU Affinity	NUMA Affinity	GPU NUMA ID[0m
+GPU0	 X 	PHB	SYS	SYS	0-9,20-29	0		N/A
+GPU1	PHB	 X 	SYS	SYS	0-9,20-29	0		N/A
+GPU2	SYS	SYS	 X 	PHB	10-19,30-39	1		N/A
+GPU3	SYS	SYS	PHB	 X 	10-19,30-39	1		N/A
+
+Legend:
+
+  X    = Self
+  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
+  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
+  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
+  PIX  = Connection traversing at most a single PCIe bridge
+  NV#  = Connection traversing a bonded set of # NVLinks
+
+## nvidia-smi topo -p2p r
+ 	[4mGPU0	GPU1	GPU2	GPU3	[0m
+ GPU0	X	OK	TNS	TNS	
+ GPU1	OK	X	TNS	TNS	
+ GPU2	TNS	TNS	X	OK	
+ GPU3	TNS	TNS	OK	X	
+
+Legend:
+
+  X    = Self
+  OK   = Status Ok
+  CNS  = Chipset not supported
+  GNS  = GPU not supported
+  TNS  = Topology not supported
+  NS   = Not supported
+  U    = Unknown
+
+drift_vs_lab02: none

@@ -1,0 +1,95 @@
+# lab-03-nccl-graph
+captured_utc: 2026-08-24T12:49:18Z
+hostname: vector-v-01
+command: scripts/lab-03-nccl-graph.sh 
+
+## default
+### env lines
+  (none)
+### graph / ring / tree lines
+  Channel 00/02 : 0 1 2 3
+  Channel 01/02 : 0 1 2 3
+  Connected all rings, use ring PXN 0 GDR 1
+  NVLS multicast support is not available on dev 0
+  NVLS multicast support is not available on dev 1
+  NVLS multicast support is not available on dev 2
+  NVLS multicast support is not available on dev 3
+  Pattern 1, crossNic 0, nChannels 1, bw 6.000000/6.000000, type SYS/PIX, sameChannels 1
+  Pattern 4, crossNic 0, nChannels 1, bw 6.000000/6.000000, type SYS/PIX, sameChannels 1
+  Ring 00 : 0 -> 1 -> 2
+  Ring 00 : 1 -> 2 -> 3
+  Ring 00 : 2 -> 3 -> 0
+  Ring 00 : 3 -> 0 -> 1
+  Ring 01 : 0 -> 1 -> 2
+  Ring 01 : 1 -> 2 -> 3
+  Ring 01 : 2 -> 3 -> 0
+  Ring 01 : 3 -> 0 -> 1
+  Setting affinity for GPU 0 to 3ff003ff
+  Setting affinity for GPU 1 to 3ff003ff
+  Setting affinity for GPU 2 to ff,c00ffc00
+  Setting affinity for GPU 3 to ff,c00ffc00
+  Tree 0 : -1 -> 0 -> 1/-1/-1
+  Tree 0 : 0 -> 1 -> 2/-1/-1
+  Tree 1 : -1 -> 0 -> 1/-1/-1
+  Tree 1 : 0 -> 1 -> 2/-1/-1
+  Trees [0] -1/-1/-1->3->2 [1] -1/-1/-1->3->2
+  Trees [0] 1/-1/-1->0->-1 [1] 1/-1/-1->0->-1
+  Trees [0] 2/-1/-1->1->0 [1] 2/-1/-1->1->0
+  Trees [0] 3/-1/-1->2->1 [1] 3/-1/-1->2->1
+### transports per link
+  Channel 00 : 0[0] -> 1[1] via SHM/direct/direct
+  Channel 00 : 1[1] -> 2[2] via SHM/direct/direct
+  Channel 00 : 2[2] -> 3[3] via SHM/direct/direct
+  Channel 00 : 3[3] -> 0[0] via SHM/direct/direct
+  Channel 01 : 0[0] -> 1[1] via SHM/direct/direct
+  Channel 01 : 1[1] -> 2[2] via SHM/direct/direct
+  Channel 01 : 2[2] -> 3[3] via SHM/direct/direct
+  Channel 01 : 3[3] -> 0[0] via SHM/direct/direct
+
+## phb
+### env lines
+  (none)
+### graph / ring / tree lines
+  Channel 00/0 : 0[0] -> 1[1] via P2P/direct pointer
+  Channel 00/0 : 2[2] -> 3[3] via P2P/direct pointer
+  Channel 00/02 : 0 1 2 3
+  Channel 01/0 : 0[0] -> 1[1] via P2P/direct pointer
+  Channel 01/0 : 2[2] -> 3[3] via P2P/direct pointer
+  Channel 01/02 : 0 1 2 3
+  Connected all rings, use ring PXN 0 GDR 1
+  NVLS multicast support is not available on dev 0
+  NVLS multicast support is not available on dev 1
+  NVLS multicast support is not available on dev 2
+  NVLS multicast support is not available on dev 3
+  Pattern 1, crossNic 0, nChannels 1, bw 6.000000/6.000000, type SYS/PIX, sameChannels 1
+  Pattern 4, crossNic 0, nChannels 1, bw 6.000000/6.000000, type SYS/PIX, sameChannels 1
+  Ring 00 : 0 -> 1 -> 2
+  Ring 00 : 1 -> 2 -> 3
+  Ring 00 : 2 -> 3 -> 0
+  Ring 00 : 3 -> 0 -> 1
+  Ring 01 : 0 -> 1 -> 2
+  Ring 01 : 1 -> 2 -> 3
+  Ring 01 : 2 -> 3 -> 0
+  Ring 01 : 3 -> 0 -> 1
+  Setting affinity for GPU 0 to 3ff003ff
+  Setting affinity for GPU 1 to 3ff003ff
+  Setting affinity for GPU 2 to ff,c00ffc00
+  Setting affinity for GPU 3 to ff,c00ffc00
+  Tree 0 : -1 -> 0 -> 1/-1/-1
+  Tree 0 : 0 -> 1 -> 2/-1/-1
+  Tree 1 : -1 -> 0 -> 1/-1/-1
+  Tree 1 : 0 -> 1 -> 2/-1/-1
+  Trees [0] -1/-1/-1->3->2 [1] -1/-1/-1->3->2
+  Trees [0] 1/-1/-1->0->-1 [1] 1/-1/-1->0->-1
+  Trees [0] 2/-1/-1->1->0 [1] 2/-1/-1->1->0
+  Trees [0] 3/-1/-1->2->1 [1] 3/-1/-1->2->1
+### transports per link
+  Channel 00 : 1[1] -> 2[2] via SHM/direct/direct
+  Channel 00 : 3[3] -> 0[0] via SHM/direct/direct
+  Channel 00/0 : 0[0] -> 1[1] via P2P/direct pointer
+  Channel 00/0 : 2[2] -> 3[3] via P2P/direct pointer
+  Channel 01 : 1[1] -> 2[2] via SHM/direct/direct
+  Channel 01 : 3[3] -> 0[0] via SHM/direct/direct
+  Channel 01/0 : 0[0] -> 1[1] via P2P/direct pointer
+  Channel 01/0 : 2[2] -> 3[3] via P2P/direct pointer
+
